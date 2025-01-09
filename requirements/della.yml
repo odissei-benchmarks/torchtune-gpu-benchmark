@@ -1,0 +1,16 @@
+name: tttest-della
+channels:
+    - pytorch
+    - nvidia
+    - conda-forge
+    - defaults
+dependencies:
+  - python=3.12
+  - pytorch
+  - pytorch-cuda=12.4
+  - torchvision
+  - pip
+  - pip:
+      - torchao
+      - torchtune
+      - wandb

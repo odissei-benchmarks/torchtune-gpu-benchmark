@@ -30,3 +30,15 @@ tune download meta-llama/Llama-2-7b-hf \
 3. Before running a job, run `tune validate config_file.yaml` to check if the config is well-formed
 
 
+### Performance tracking
+
+`s/it` is taken from the log file.
+
+| cluster  | gpus 	| cpus | dataset                                   | date     | s/it	  | 
+|----------|-----------	|------|-------------------------------------------|----------|-----------|
+| Snellius | 1xA100     | 18   | torchtune.datasets.alpaca_cleaned_dataset | 09/01/24 | 2.4s/it   |
+|          |     	|      |                                           |          |     	  |
+|          |      	|      |                                           |          |      	  |
+
+
+

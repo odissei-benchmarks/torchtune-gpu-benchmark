@@ -16,6 +16,6 @@ source requirements/load_venv.sh
 
 
 #tune run full_finetune_single_device --config full_low_memory.yaml
-tune run lora_finetune_single_device --config configs/lora_single.yaml
-
+tune run lora_finetune_single_device \
+	--config configs/1B_lora_single_device.yaml
 

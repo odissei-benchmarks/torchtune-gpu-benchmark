@@ -3,4 +3,5 @@ torchvision
 torchao
 torchtune
 bitsandbytes
+wandb
 

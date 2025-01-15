@@ -1,36 +1,31 @@
 #!/bin/bash
 #
-#SBATCH --job-name=lora_single
+#SBATCH --job-name=a100_1device
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
 #SBATCH --time=15:00
 #SBATCH --mem=80G
-#SBATCH -p gpu
+#SBATCH -p gpu_a100
 #SBATCH --gpus 1
 #SBATCH -e logs/%x-%j.err
 #SBATCH -o logs/%x-%j.out
 
-
-MODEL_NAME="Llama-3-2-1b-Instruct"
-DATA_ROOT="/projects/0/prjs1019"
-
-MODEL_DIR="${DATA_ROOT}/torchtune/models/${MODEL_NAME}"
-OUTPUT_DIR="${DATA_ROOT}/torchtune/outputs/${MODEL_NAME}"
-
-WANDB_DIR="${OUTPUT_DIR}/wandb"
-if [ ! -d "${WANDB_DIR}" ]; then
-    mkdir -p "${WANDB_DIR}"
-fi
-
 source requirements/load_venv.sh
+source snellius-scripts/setup.sh
+
+WANDB_NAME="a100_1device" # passed to wandb.init
+
 
 tune run \
     lora_finetune_single_device \
     --config configs/1B_lora_single_device.yaml \
+    max_steps_per_epoch=$MAX_STEPS \
     checkpointer.checkpoint_dir=$MODEL_DIR \
     tokenizer.path=$MODEL_DIR/original/tokenizer.model \
     checkpointer.output_dir=$OUTPUT_DIR \
-    metric_logger.log_dir=$OUTPUT_DIR 
+    metric_logger.log_dir=$OUTPUT_DIR \
+    metric_logger.name=$WANDB_NAME \
+    metric_logger.id=$WANDB_NAME
 
 

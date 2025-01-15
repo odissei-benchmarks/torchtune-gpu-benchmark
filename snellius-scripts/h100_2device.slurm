@@ -1,0 +1,31 @@
+#!/bin/bash
+#
+#SBATCH --job-name=h100_2device
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=15:00
+#SBATCH --mem=80G
+#SBATCH -p gpu_a100
+#SBATCH --gpus 2
+#SBATCH -e logs/%x-%j.err
+#SBATCH -o logs/%x-%j.out
+
+source requirements/load_venv.sh
+source snellius-scripts/setup.sh
+
+WANDB_NAME="h100_2device" # passed to wandb.init
+
+tune run \
+    --nproc_per_node 2 \
+    lora_finetune_distributed \
+    --config configs/1B_lora_distributed.yaml \
+    max_steps_per_epoch=$MAX_STEPS \
+    checkpointer.checkpoint_dir=$MODEL_DIR \
+    tokenizer.path=$MODEL_DIR/original/tokenizer.model \
+    checkpointer.output_dir=$OUTPUT_DIR \
+    metric_logger.log_dir=$OUTPUT_DIR \
+    metric_logger.name=$WANDB_NAME \
+    metric_logger.id=$WANDB_NAME
+
+

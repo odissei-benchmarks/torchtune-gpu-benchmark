@@ -3,7 +3,7 @@ Code for running gpu benchmarks with torchtune
 
 Based on this tutorial: https://pytorch.org/torchtune/main/tutorials/first_finetune_tutorial.html. 
 
-### Setup: Snellius
+### Setup
 
 ```
 # create model directory
@@ -24,22 +24,41 @@ tune download meta-llama/Llama-2-7b-hf \
 ``` 
 
 
-### Creating config files
+### Running jobs
 
-1. Run `tune cp lla2/7B_lora_single_device custom_config.yaml`
-2. Update `custom_config.yaml`, in particular the paths to the checkpoints and the outputs. They may also be provided from the command line but I have not tried this.
-3. Before running a job, run `tune validate config_file.yaml` to check if the config is well-formed
+Torchtune configuration can be managed through yaml files or through command line arguments. Command line arguments override the configuration file.
 
+The configuration files in `config/` contain those parameters that are not changing (much) across machines and runs. Command line arguments are used for paths, which are machine-specific, and `max_steps_per_epoch`, which is mostly for fast devruns. 
 
+Jobs for benchmarking can be run with 
+
+```
+cd torchtune-gpu-benchmarks
+source snellius-scripts/run_jobs.sh
+```
+The script submits all jobs related to the benchmarking.
+
+There is one slurm script for each permutation of (gpu type, N gpus). The have common parameters for the model and output location, which are stored in `snellius-scripts/setup.sh`. 
+
+Dependencies for snellius are in `requirements/load_venv.sh`.
+
+I tried to keep names for `wandb` specific to the experiment runs, but the `name` and `job_type` parameter did not work. For now, I'm using the `id` parameter which creates directories such as `wandb/offline-run-20250115_122206-{id}`.
+ 
 ### Performance tracking
 
-`s/it` is taken from the log file.
+- dataset: torchtune.datasets.alpaca_cleaned_dataset
+- batch size > 6 leads to OOM. how do we know bs=6 will not OOM after the max steps we're doing?
 
-| cluster  | gpus 	| cpus | dataset                                   | date     | s/it	  | 
-|----------|-----------	|------|-------------------------------------------|----------|-----------|
-| Snellius | 1xA100     | 18   | torchtune.datasets.alpaca_cleaned_dataset | 09/01/24 | 2.4s/it   |
-|          |     	|      |                                           |          |     	  |
-|          |      	|      |                                           |          |      	  |
+| cluster  | gpus 	| cpus | date     | tokens/s  | batch size |
+|----------|-----------	|------|----------|-----------|------------
+| Snellius | 1xA100     | 18   | 16/01/25 | 17700     | 6 
+| Snellius | 2xA100     | 18   | 16/01/25 | 5000      | 6 
+| Snellius | 4xA100     | 18   | 16/01/25 | 5500      | 6
+| Snellius | 1xH100     | 18   | 16/01/25 | 31100     | 6  
+| Snellius | 2xH100     | 18   | 16/01/25 | 5000      | 6
+| Snellius | 4xH100     | 18   | 16/01/25 | 8000      | 6 
+|          |     	|      |          |           |
+|          |      	|      |          |           |
 
 
 

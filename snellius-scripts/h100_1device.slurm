@@ -16,7 +16,6 @@ source snellius-scripts/setup.sh
 
 WANDB_NAME="h100_1device" # passed to wandb.init
 
-
 tune run \
     lora_finetune_single_device \
     --config configs/1B_lora_single_device.yaml \
@@ -26,6 +25,7 @@ tune run \
     checkpointer.output_dir=$OUTPUT_DIR \
     metric_logger.log_dir=$OUTPUT_DIR \
     metric_logger.name=$WANDB_NAME \
-    metric_logger.id=$WANDB_NAME
+    metric_logger.id=$WANDB_NAME \
+    batch_size=$BATCH_SIZE
 
 

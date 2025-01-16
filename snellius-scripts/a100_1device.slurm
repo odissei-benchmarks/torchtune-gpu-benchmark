@@ -26,6 +26,7 @@ tune run \
     checkpointer.output_dir=$OUTPUT_DIR \
     metric_logger.log_dir=$OUTPUT_DIR \
     metric_logger.name=$WANDB_NAME \
-    metric_logger.id=$WANDB_NAME
+    metric_logger.id=$WANDB_NAME \
+    batch_size=$BATCH_SIZE
 
 

@@ -51,12 +51,12 @@ I tried to keep names for `wandb` specific to the experiment runs, but the `name
 
 | cluster  | gpus 	| cpus | date     | tokens/s  | batch size |
 |----------|-----------	|------|----------|-----------|------------
-| Snellius | 1xA100     | 18   | 16/01/25 | 17700     | 6 
-| Snellius | 2xA100     | 18   | 16/01/25 | 5000      | 6 
-| Snellius | 4xA100     | 18   | 16/01/25 | 5500      | 6
-| Snellius | 1xH100     | 18   | 16/01/25 | 31100     | 6  
-| Snellius | 2xH100     | 18   | 16/01/25 | 5000      | 6
-| Snellius | 4xH100     | 18   | 16/01/25 | 8000      | 6 
+| Snellius | 1xA100     | 18   | 17/01/25 | 17500     | 6 
+| Snellius | 2xA100     | 18   | 17/01/25 | 16500     | 6 
+| Snellius | 4xA100     | 18   | 17/01/25 | 16400     | 6
+| Snellius | 1xH100     | 18   | 17/01/25 | 31100     | 6  
+| Snellius | 2xH100     | 18   | 17/01/25 | 28800     | 6
+| Snellius | 4xH100     | 18   | 17/01/25 | 28600     | 6 
 |          |     	|      |          |           |
 |          |      	|      |          |           |
 

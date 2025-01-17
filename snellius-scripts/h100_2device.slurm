@@ -6,7 +6,7 @@
 #SBATCH --cpus-per-task=18
 #SBATCH --time=15:00
 #SBATCH --mem=80G
-#SBATCH -p gpu_a100
+#SBATCH -p gpu_h100
 #SBATCH --gpus 2
 #SBATCH -e logs/%x-%j.err
 #SBATCH -o logs/%x-%j.out
@@ -14,10 +14,9 @@
 source requirements/load_venv.sh
 source snellius-scripts/setup.sh
 
-WANDB_NAME="h100_2device" # passed to wandb.init
-
 tune run \
-    --nproc_per_node 2 \
+    --nproc_per_node=$SLURM_GPUS \
+    --nnodes=$SLURM_JOB_NUM_NODES \
     lora_finetune_distributed \
     --config configs/1B_lora_distributed.yaml \
     max_steps_per_epoch=$MAX_STEPS \

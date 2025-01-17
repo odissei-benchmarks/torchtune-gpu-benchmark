@@ -14,8 +14,6 @@
 source requirements/load_venv.sh
 source snellius-scripts/setup.sh
 
-WANDB_NAME="h100_1device" # passed to wandb.init
-
 tune run \
     lora_finetune_single_device \
     --config configs/1B_lora_single_device.yaml \

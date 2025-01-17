@@ -14,10 +14,9 @@
 source requirements/load_venv.sh
 source snellius-scripts/setup.sh
 
-WANDB_NAME="a100_4device" # passed to wandb.init
-
 tune run \
-    --nproc_per_node 4 \
+    --nproc_per_node=$SLURM_GPUS \
+    --nnodes=$SLURM_JOB_NUM_NODES \
     lora_finetune_distributed \
     --config configs/1B_lora_distributed.yaml \
     max_steps_per_epoch=$MAX_STEPS \

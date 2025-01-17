@@ -15,5 +15,12 @@ if [ ! -d "${WANDB_DIR}" ]; then
     mkdir -p "${WANDB_DIR}"
 fi
 
+WANDB_NAME=$SLURM_JOB_NAME
+
+
+export RDZV_HOST=$(hostname)
+export RDZV_PORT=29400
+
+echo "Running on host:: $RDZV_HOST"
 
 

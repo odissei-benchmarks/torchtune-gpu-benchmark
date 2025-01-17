@@ -50,7 +50,7 @@ save_adapter_weights_only: False
 # Dataset and Sampler
 dataset:
   _component_: torchtune.datasets.alpaca_cleaned_dataset
-  packed: False  # True increases speed
+  packed: True  # True increases speed
 seed: 14
 shuffle: True
 batch_size: 1

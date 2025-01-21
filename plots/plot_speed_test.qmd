@@ -1,0 +1,43 @@
+---
+title: "Benchmarking GPU speed on Della, Snellius, and OSSC"
+author: "Flavio, Malte, Mattie, Alessandra, Matt"
+format: pdf
+editor: visual
+---
+
+# Load libraries and data
+
+```{r}
+suppressPackageStartupMessages(library(tidyverse))
+setwd("~/Dropbox (Princeton)/ntr/ossc")
+filename <- "fake_speed_test_data.csv"
+df <- read_csv(file = filename, show_col_types = FALSE)
+```
+# Make plot
+
+```{r}
+p <- ggplot(df, 
+            aes(x = num_gpu, y = tokens_per_second, color = system, group = system)) +
+  geom_point(size = 1, alpha = 0.5) +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, linewidth = 1, alpha = 0.5) +
+  facet_wrap(facets = "gpu_type") +
+  scale_x_continuous(breaks = c(1, 2, 4)) +
+  scale_y_continuous(labels = scales::comma, limits = c(0, NA)) +
+  scale_color_brewer(palette = "Set1") +
+  labs(
+    title = "Performance across systems",
+    subtitle ="Individual runs and trend lines",
+    x = "Number of GPUs",
+    y = "Tokens per Second",
+    color = "System"
+  )
+
+# Print the plot
+print(p)
+```
+
+# Show raw data
+
+```{r}
+print(df, n=Inf)
+```

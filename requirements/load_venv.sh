@@ -1,8 +1,8 @@
 
 
 module purge
-module load 2023
-module load Python/3.11.3-GCCcore-12.3.0
+module load 2024
+module load Python/3.12.3-GCCcore-13.3.0
 
 source .venv/bin/activate
 

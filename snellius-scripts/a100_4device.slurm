@@ -12,7 +12,12 @@
 #SBATCH -e logs/%x-%j.err
 #SBATCH -o logs/%x-%j.out
 
-source requirements/load_venv.sh
+cd ..
+mkdir $TMPDIR/repo
+cp -r torchtune-gpu-benchmark/* $TMPDIR/repo/
+cd $TMPDIR/repo
+
+source snellius-scripts/install_on_tempdir.sh
 source snellius-scripts/setup.sh
 
 tune run \

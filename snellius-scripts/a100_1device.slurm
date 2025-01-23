@@ -8,6 +8,7 @@
 #SBATCH --mem=80G
 #SBATCH -p gpu_a100
 #SBATCH --gpus 1
+#SBATCH --constraint=scratch-node
 #SBATCH -e logs/%x-%j.err
 #SBATCH -o logs/%x-%j.out
 

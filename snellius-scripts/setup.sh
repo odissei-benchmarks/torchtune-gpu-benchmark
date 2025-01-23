@@ -24,3 +24,10 @@ export RDZV_PORT=29400
 echo "Running on host:: $RDZV_HOST"
 
 
+cp -r $MODEL_DIR $TMPDIR 
+MODEL_DIR="${TMPDIR}/${MODEL_NAME}"
+
+echo "Copied model to ${MODEL_DIR} and reading from there."
+
+
+

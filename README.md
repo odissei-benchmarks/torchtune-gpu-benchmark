@@ -10,7 +10,9 @@ Systems tested:
 
 ### Contents of directories
 - `cbs/` contains a README I sent along the model upload
-- `della-scripts` and `snellius-scripts` contain scripts for running code on the respective systems
+- `della-scripts`, `snellius-scripts` and `ossc-scripts` contain scripts for running code on the respective systems. They also have READMEs describing details for running the scripts
 - `plots/` contains some code from Matt for comparing the runs across systems
 - `requirements/` contains files related to managing dependencies
 -  `configs/` contains configuration files for torchtune.
+- `datasets/` contains training datasets.
+    - `alpaca_data_cleaned.json` contains text that is fed to the model for updating the parameters.

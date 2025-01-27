@@ -16,3 +16,4 @@ Systems tested:
 -  `configs/` contains configuration files for torchtune.
 - `datasets/` contains training datasets.
     - `alpaca_data_cleaned.json` contains text that is fed to the model for updating the parameters.
+    - The dataset is licensed under `datasets/LICENSE`, while the remaining code in this repository falls under `./LICENSE`.

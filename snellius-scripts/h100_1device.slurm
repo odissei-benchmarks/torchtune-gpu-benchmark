@@ -24,6 +24,8 @@ tune run \
     metric_logger.log_dir=$OUTPUT_DIR \
     metric_logger.name=$WANDB_NAME \
     metric_logger.id=$WANDB_NAME \
-    batch_size=$BATCH_SIZE
+    batch_size=$BATCH_SIZE \
+    dataset.data_files="datasets/alpaca_data_cleaned.json" \
+    dataset.source="json"
 
 

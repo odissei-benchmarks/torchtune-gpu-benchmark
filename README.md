@@ -17,3 +17,15 @@ Systems tested:
 - `datasets/` contains training datasets.
     - `alpaca_data_cleaned.json` contains text that is fed to the model for updating the parameters.
     - The dataset is licensed under `datasets/LICENSE`, while the remaining code in this repository falls under `./LICENSE`.
+
+
+### Performance results
+
+| Batch Size 6 Comparison On: | Della | Snellius | OSSC  |
+|:---------------------------:|:-----:|:--------:|:-----:|
+|            1 A100           | 19422 |   17500  | 17700 | 
+|           2 A100s           | 18247 |   16500  | 16500 |
+|           4 A100s           | 18019 |   16400  | 16400 |
+|            1 H100           | 36668 |   31100  | 31000 |
+|           2 H100s           | 34228 |   28800  | 28600 |
+|           4 H100s           | 33650 |   28600  | 28500 |

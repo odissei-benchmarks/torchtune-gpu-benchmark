@@ -1,24 +1,22 @@
 #!/bin/bash
 #
-#SBATCH --job-name=a100_2device
+#SBATCH --job-name=h100_1device
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
 #SBATCH --time=15:00
 #SBATCH --mem=80G
-#SBATCH -p gpu_a100
-#SBATCH --gpus 2
+#SBATCH -p comp_env
 #SBATCH -e logs/%x-%j.err
 #SBATCH -o logs/%x-%j.out
 
 source requirements/load_venv.sh
 source snellius-scripts/setup.sh
 
+export CUDA_VISIBLE_DEVICES=0
 tune run \
-    --nproc_per_node=$SLURM_GPUS \
-    --nnodes=$SLURM_JOB_NUM_NODES \
-    lora_finetune_distributed \
-    --config configs/1B_lora_distributed.yaml \
+    lora_finetune_single_device \
+    --config configs/1B_lora_single_device.yaml \
     max_steps_per_epoch=$MAX_STEPS \
     checkpointer.checkpoint_dir=$MODEL_DIR \
     tokenizer.path=$MODEL_DIR/original/tokenizer.model \
@@ -29,4 +27,5 @@ tune run \
     batch_size=$BATCH_SIZE \
     dataset.data_files="datasets/alpaca_data_cleaned.json" \
     dataset.source="json"
+
 

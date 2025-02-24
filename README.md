@@ -29,3 +29,9 @@ Systems tested:
 |            1 H100           | 36668 |   31100  | 31000 |
 |           2 H100s           | 34228 |   28800  | 28600 |
 |           4 H100s           | 33650 |   28600  | 28500 |
+
+The difference between Snellius and Della is down to memory clock speeds:
+|      | Della    | Snellius |
+|------|----------|----------|
+| A100 | 1600 MHz | 1215 MHz |
+| H100 | 2600 MHz | 1590 MHz |

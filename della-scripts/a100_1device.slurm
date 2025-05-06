@@ -12,7 +12,7 @@
 
 module purge
 module load anaconda3/2024.6
-conda activate tttestc
+conda activate ttenv
 source setup-della.sh
 
 tune run \
@@ -21,7 +21,7 @@ tune run \
     max_steps_per_epoch=$MAX_STEPS \
     checkpointer.checkpoint_dir=$MODEL_DIR \
     tokenizer.path=$MODEL_DIR/original/tokenizer.model \
-    checkpointer.output_dir=$OUTPUT_DIR \
+    output_dir=$OUTPUT_DIR \
     metric_logger.log_dir=$OUTPUT_DIR \
     metric_logger.name=$WANDB_NAME \
     metric_logger.id=$WANDB_NAME \

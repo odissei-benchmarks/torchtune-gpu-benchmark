@@ -3,12 +3,12 @@ Code for running gpu benchmarks with torchtune on della
 
 ### Setup
 
-1. Create a conda environment (you can change the name from tttestc, an abbreviation for torchtune test conda):
+1. Create a conda environment (you can change the name from ttenv, an abbreviation for torchtune test conda):
 
 ```
 module load anaconda3/2024.6
-conda create -n tttestc pytorch torchvision pytorch-cuda=12.4 -c pytorch -c nvidia
-conda activate tttestc
+conda create -n ttenv pytorch torchvision pytorch-cuda=12.4 -c pytorch -c nvidia
+conda activate ttenv
 pip install torchao
 pip install torchtune
 pip install wandb

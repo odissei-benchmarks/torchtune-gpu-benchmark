@@ -5,15 +5,14 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
 #SBATCH --gres=gpu:4
-#SBATCH --time=0:59:00
+#SBATCH --time=00:20:00
 #SBATCH --mail-type=begin
 #SBATCH --mail-type=end
 #SBATCH --output=logs/%x-%j.out
-#SBATCH --account=msalganik
 
 module purge
 module load anaconda3/2024.10
-conda activate ttenv-novision
+conda activate ttenv
 source setup-della.sh
 
 # Grab the IP for head node:

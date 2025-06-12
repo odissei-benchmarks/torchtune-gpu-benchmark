@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=a100_8device
-#SBATCH --nodes=1
+#SBATCH --nodes=2
 #SBATCH --ntasks=2
 #SBATCH --cpus-per-task=18
 #SBATCH --time=20:00
 #SBATCH --mem=80G
 #SBATCH -p gpu_a100
-#SBATCH --gpus 4
+#SBATCH --gpus-per-node=4
 #SBATCH -e logs/%x-%j.err
 #SBATCH -o logs/%x-%j.out
 
@@ -26,8 +26,11 @@ export LOGLEVEL=INFO
 export NCCL_DEBUG=INFO
 
 srun tune run \
-    --nproc_per_node=$SLURM_GPUS \
     --nnodes=$SLURM_JOB_NUM_NODES \
+    --nproc_per_node=$SLURM_GPUS \
+    --rdzv_id=$SLURM_JOB_ID \
+    --rdzv_backend=c10d \
+    --rdzv_endpoint="$head_node_ip:29500" \
     lora_finetune_distributed \
     --config configs/1B_lora_distributed.yaml \
     max_steps_per_epoch=$MAX_STEPS \
@@ -37,7 +40,7 @@ srun tune run \
     metric_logger.log_dir=$OUTPUT_DIR \
     metric_logger.name=$WANDB_NAME \
     metric_logger.id=$WANDB_NAME \
-    batch_size=3 \
+    batch_size=$BATCH_SIZE \
     dataset.data_files="datasets/alpaca_data_cleaned.json" \
     dataset.source="json"
 

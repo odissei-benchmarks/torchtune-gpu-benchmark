@@ -7,11 +7,13 @@
 #SBATCH --mem=80G
 #SBATCH -p gpu_a100
 #SBATCH --gpus-per-node=4
-#SBATCH -e logs/%x-%j.err
-#SBATCH -o logs/%x-%j.out
+#SBATCH -e logs/%x-%j-%n.err
+#SBATCH -o logs/%x-%j-%n.out
 
 source requirements/load_venv.sh
 source snellius-scripts/setup.sh
+
+ip address
 
 # Grab the IP for head node:
 # You may need to set this to the fully qualified domain name of your head node
@@ -22,7 +24,7 @@ head_node_ip=$(srun --nodes=1 --ntasks=1 -w "$head_node" hostname --ip-address)
 echo Node IP: $head_node_ip
 
 export TORCH_DIST_INIT_BARRIER=1
-export NCCL_SOCKET_IFNAME=ib0
+export NCCL_SOCKET_IFNAME="eno1np0"
 export LOGLEVEL=INFO
 export NCCL_DEBUG=INFO
 

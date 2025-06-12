@@ -26,8 +26,8 @@ export LOGLEVEL=INFO
 export NCCL_DEBUG=INFO
 
 srun tune run \
-    --nnodes=$SLURM_JOB_NUM_NODES \
-    --nproc_per_node=$SLURM_GPUS \
+    --nnodes=2 \
+    --nproc_per_node=4 \
     --rdzv_id=$SLURM_JOB_ID \
     --rdzv_backend=c10d \
     --rdzv_endpoint="$head_node_ip:29500" \

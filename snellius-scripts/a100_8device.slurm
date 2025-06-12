@@ -22,6 +22,7 @@ head_node_ip=$(srun --nodes=1 --ntasks=1 -w "$head_node" hostname --ip-address)
 echo Node IP: $head_node_ip
 
 export TORCH_DIST_INIT_BARRIER=1
+export NCCL_SOCKET_IFNAME=ib0
 export LOGLEVEL=INFO
 export NCCL_DEBUG=INFO
 

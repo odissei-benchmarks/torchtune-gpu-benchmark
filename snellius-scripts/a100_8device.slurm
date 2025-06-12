@@ -2,13 +2,13 @@
 #SBATCH --job-name=a100_8device
 #SBATCH --nodes=2
 #SBATCH --ntasks=2
-#SBATCH --cpus-per-task=18
+#SBATCH --cpus-per-task=8
 #SBATCH --time=20:00
 #SBATCH --mem=80G
 #SBATCH -p gpu_a100
 #SBATCH --gpus-per-node=4
-#SBATCH -e logs/%x-%j-%n.err
-#SBATCH -o logs/%x-%j-%n.out
+#SBATCH -e logs/%x-%j.err
+#SBATCH -o logs/%x-%j.out
 
 source requirements/load_venv.sh
 source snellius-scripts/setup.sh

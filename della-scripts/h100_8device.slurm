@@ -2,8 +2,8 @@
 #SBATCH --job-name=h100_n2g8b1
 #SBATCH --nodes=2
 #SBATCH --ntasks=2
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=16G
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=32G
 #SBATCH --gres=gpu:4
 #SBATCH --time=00:20:00
 #SBATCH --partition=pli-c
@@ -28,7 +28,7 @@ export TORCH_DIST_INIT_BARRIER=1
 export LOGLEVEL=INFO
 export NCCL_DEBUG=INFO
 
-tune run \
+srun tune run \
     --nnodes=2 \
     --nproc_per_node=4 \
     --rdzv_id=$SLURM_JOB_ID \

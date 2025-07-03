@@ -1,0 +1,5 @@
+torch>=2.7
+torchvision
+torchao
+torchtune
+wandb

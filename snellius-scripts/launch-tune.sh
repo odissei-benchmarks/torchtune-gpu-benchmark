@@ -19,7 +19,7 @@ REPO_URL=$HOME/repositories/torchtune-gpu-benchmark/
 export APPTAINER_TMPDIR="$REPO_URL/snellius-scripts/tmp/"
 export APPTAINER_CACHEDIR="$REPO_URL/snellius-scripts/cache/"
 
-source setup.sh
+source "$REPO_URL/snellius-scripts/setup.sh"
 
 # TODO: automatic nproc per node and nnodes
 tune run \
@@ -29,7 +29,7 @@ tune run \
     --rdzv_backend=c10d \
     --rdzv_endpoint=$MASTER_ADDR:29500 \
     lora_finetune_distributed \
-    --config ../configs/1B_lora_distributed.yaml \
+    --config "$REPO_URL/configs/1B_lora_distributed.yaml" \
     max_steps_per_epoch=$MAX_STEPS \
     checkpointer.checkpoint_dir=$MODEL_DIR \
     tokenizer.path=$MODEL_DIR/original/tokenizer.model \

@@ -11,11 +11,11 @@ BATCH_SIZE=6
 MODEL_NAME="Llama-3-2-1b-Instruct"
 
 if [[ -n "$APPTAINER_CONTAINER" || -n "$SINGULARITY_CONTAINER" || -n "$CONTAINER" ]]; then
-    DATA_ROOT="/prjs1019/torchtune/"
+    DATA_ROOT="/prjs1589/torchtune/"
 elif [[ $RDZV_HOST == *"ossc"* ]]; then
     DATA_ROOT="/gpfs/ostor/ossc9424/homedir/torchtune/"
 else
-    DATA_ROOT="/projects/0/prjs1019/torchtune"
+    DATA_ROOT="/projects/0/prjs1589/torchtune"
 fi
 
 MODEL_DIR="${DATA_ROOT}/models/${MODEL_NAME}"

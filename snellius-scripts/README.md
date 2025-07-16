@@ -7,7 +7,7 @@ Based on this tutorial: https://pytorch.org/torchtune/main/tutorials/first_finet
 
 ```
 # create model directory
-model_dir="/projects/0/prjs1019/torchtune/models/Llama-2-7b-hf/"
+model_dir="/projects/0/prjs1589/torchtune/models/Llama-3-2-1b-Instruct"
 
 module load 2024
 module load Python/3.12.3-GCCcore-13.3.0
@@ -17,7 +17,7 @@ source .venv/bin/activate
 
 pip install -r requirements/snellius.txt
 
-tune download meta-llama/Llama-2-7b-hf \
+tune download meta-llama/Llama-3.2-1b-Instruct \
     --output-dir "$model_dir" \
     --hf-token <ACCESS TOKEN>
 

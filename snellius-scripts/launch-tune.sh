@@ -14,14 +14,17 @@ echo "MASTER_ADDR=$MASTER_ADDR"
 echo "WORLD_SIZE=$WORLD_SIZE"
 echo "RANK=$RANK"
 
-export APPTAINER_TMPDIR=/home/mniznik/GitHub/torchtune-gpu-benchmark/snellius-scripts/tmp/
-export APPTAINER_CACHEDIR=/home/mniznik/GitHub/torchtune-gpu-benchmark/snellius-scripts/cache/
+REPO_URL=$HOME/repositories/torchtune-gpu-benchmark/
+
+export APPTAINER_TMPDIR="$REPO_URL/snellius-scripts/tmp/"
+export APPTAINER_CACHEDIR="$REPO_URL/snellius-scripts/cache/"
 
 source setup.sh
 
+# TODO: automatic nproc per node and nnodes
 tune run \
-    --nproc_per_node=4 \
-    --nnodes=2 \
+    --nproc_per_node=1 \
+    --nnodes=1 \
     --rdzv_id=$SLURM_JOB_ID \
     --rdzv_backend=c10d \
     --rdzv_endpoint=$MASTER_ADDR:29500 \

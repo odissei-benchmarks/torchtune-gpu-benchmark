@@ -7,7 +7,7 @@ export RANK=$SLURM_PROCID
 export LOCAL_RANK=$SLURM_LOCALID
 
 # eth1 for OSSC
-export NCCL_SOCKET_IFNAME="eno2np0"
+export NCCL_SOCKET_IFNAME="eno"
 export NCCL_DEBUG=INFO
 
 echo "MASTER_ADDR=$MASTER_ADDR"

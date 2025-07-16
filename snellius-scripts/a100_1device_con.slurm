@@ -14,7 +14,7 @@
 export MASTER_ADDR=$(scontrol show hostnames "$SLURM_STEP_NODELIST" | head -n 1)
 echo "MASTER_ADDR: $MASTER_ADDR"
 
-PROJECT_DIR=/projects/0/prjs1589/torchtune/
+PROJECT_DIR=/projects/0/prjs1589/
 
 # Grab the IP for head node
 nodes=( $( scontrol show hostnames $SLURM_JOB_NODELIST ) )
@@ -24,9 +24,9 @@ head_node_ip=$(srun --nodes=1 --ntasks=1 -w "$head_node" hostname --ip-address)
 echo Node IP: $head_node_ip
 
 # eth1 for OSSC
-export NCCL_SOCKET_IFNAME="eno2np0"
+export NCCL_SOCKET_IFNAME="eno"
 export NCCL_DEBUG=INFO
-
+2
 # Set distributed training env variables
 export MASTER_ADDR=$head_node_ip
 export MASTER_PORT=12345
@@ -43,5 +43,5 @@ srun apptainer exec \
   --env WORLD_SIZE=$WORLD_SIZE \
   --env GPUS_PER_NODE=$GPUS_PER_NODE \
   --nv \
-  $PROJECT_DIR/containers/megatron-torch.sif \
+  $PROJECT_DIR/torchtune/containers/megatron-torch.sif \
   ./snellius-scripts/launch-tune.sh

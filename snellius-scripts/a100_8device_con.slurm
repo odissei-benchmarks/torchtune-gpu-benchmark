@@ -2,8 +2,11 @@
 #
 #SBATCH --job-name=a100_8device_con
 #SBATCH --nodes=2
-#SBATCH --ntasks-per-node=4
-#SBATCH --cpus-per-task=1
+#SBATCH --ntasks=2
+## #SBATCH --ntasks-per-node=4
+## #SBATCH --cpus-per-task=1
+## # the above settings create duplicated GPU device ids for some reason
+#SBATCH --cpus-per-task=8
 #SBATCH --time=20:00
 #SBATCH --mem=80G
 #SBATCH -p gpu_a100
@@ -24,7 +27,7 @@ head_node_ip=$(srun --nodes=1 --ntasks=1 -w "$head_node" hostname --ip-address)
 echo Node IP: $head_node_ip
 
 # eth1 for OSSC
-export NCCL_SOCKET_IFNAME="eno"
+#export NCCL_SOCKET_IFNAME="eno"
 export NCCL_DEBUG=INFO
 
 # Set distributed training env variables

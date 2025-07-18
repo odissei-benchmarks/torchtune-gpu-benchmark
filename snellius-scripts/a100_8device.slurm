@@ -24,8 +24,9 @@ head_node_ip=$(srun --nodes=1 --ntasks=1 -w "$head_node" hostname --ip-address)
 echo Node IP: $head_node_ip
 
 export TORCH_DIST_INIT_BARRIER=1
-export NCCL_SOCKET_IFNAME="eno1np0"
-export LOGLEVEL=INFO
+export NCCL_SOCKET_IFNAME="eno1np0" 
+# just "eno" does not work with module python and pip-installed pytorch
+e xport LOGLEVEL=INFO
 export NCCL_DEBUG=INFO
 
 srun tune run \

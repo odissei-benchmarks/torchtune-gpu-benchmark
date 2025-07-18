@@ -13,7 +13,7 @@ MODEL_NAME="Llama-3-2-1b-Instruct"
 if [[ $RDZV_HOST == *"ossc"* ]]; then 
     DATA_ROOT="$HOME/SD-102404/torchtune/" # NOTE: this is a temporary fix; we should use $PROJECT
 else
-    DATA_ROOT="/projects/0/prjs1019/torchtune"
+    DATA_ROOT="/projects/0/prjs1589/torchtune"
 fi
 
 MODEL_DIR="${DATA_ROOT}/models/${MODEL_NAME}"

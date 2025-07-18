@@ -6,8 +6,8 @@
 export RANK=$SLURM_PROCID
 export LOCAL_RANK=$SLURM_LOCALID
 
-# eth1 for OSSC
-export NCCL_SOCKET_IFNAME="eno"
+# eth1 for OSSC -- see srun apptainer command!
+#export NCCL_SOCKET_IFNAME="eno"
 export NCCL_DEBUG=INFO
 
 echo "MASTER_ADDR=$MASTER_ADDR"
@@ -23,8 +23,8 @@ source "$REPO_URL/snellius-scripts/setup.sh"
 
 # TODO: automatic nproc per node and nnodes
 tune run \
-    --nproc_per_node=4 \
-    --nnodes="$SLURM_NNODES" \
+    --nproc_per_node=$SLURM_GPUS_PER_NODE \
+    --nnodes=$SLURM_NNODES \
     --rdzv_id=$SLURM_JOB_ID \
     --rdzv_backend=c10d \
     --rdzv_endpoint=$MASTER_ADDR:29500 \

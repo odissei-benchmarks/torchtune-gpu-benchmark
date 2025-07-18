@@ -16,8 +16,10 @@ echo "RANK=$RANK"
 
 REPO_URL=$HOME/repositories/torchtune-gpu-benchmark/
 
-export APPTAINER_TMPDIR="$REPO_URL/snellius-scripts/tmp/"
+export APPTAINER_TMPDIR=/scratch-shared/$USER/apptainer
 export APPTAINER_CACHEDIR="$REPO_URL/snellius-scripts/cache/"
+
+mkdir -p $APPTAINER_TMPDIR $APPTAINER_CACHEDIR
 
 source "$REPO_URL/snellius-scripts/setup.sh"
 

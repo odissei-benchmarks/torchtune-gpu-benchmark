@@ -39,8 +39,6 @@ srun apptainer exec \
   --bind $PROJECT_DIR:/prjs1589 \
   --bind /tmp:$HOME/repositories/torchtune-gpu-benchmark/snellius-scripts/tmp_exec \
   --env NCCL_SOCKET_IFNAME=eno \
-  --env NCCL_IB_HCA=mlx5_2,mlx5_3,mlx5_4,mlx5_5 \
-  --env CUDA_DEVICE_MAX_CONNECTIONS=1 \
   --env MASTER_PORT=$MASTER_PORT \
   --env MASTER_ADDR=$MASTER_ADDR \
   --env WORLD_SIZE=$WORLD_SIZE \

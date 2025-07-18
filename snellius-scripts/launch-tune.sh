@@ -24,7 +24,7 @@ source "$REPO_URL/snellius-scripts/setup.sh"
 # TODO: automatic nproc per node and nnodes
 tune run \
     --nproc_per_node=4 \
-    --nnodes=1 \
+    --nnodes="$SLURM_NNODES" \
     --rdzv_id=$SLURM_JOB_ID \
     --rdzv_backend=c10d \
     --rdzv_endpoint=$MASTER_ADDR:29500 \

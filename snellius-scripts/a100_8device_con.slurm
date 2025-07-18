@@ -32,9 +32,6 @@ export MASTER_ADDR=$head_node_ip
 export MASTER_PORT=12345
 export WORLD_SIZE=$((SLURM_JOB_NUM_NODES * SLURM_GPUS_PER_NODE))
 
-
-
-
 srun apptainer exec \
   --bind $PROJECT_DIR:/prjs1589 \
   --bind /tmp:$HOME/repositories/torchtune-gpu-benchmark/snellius-scripts/tmp_exec \

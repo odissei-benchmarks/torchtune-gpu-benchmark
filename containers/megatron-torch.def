@@ -2,7 +2,7 @@ Bootstrap: docker
 From: nvcr.io/nvidia/pytorch:25.06-py3
 
 %files
-    requirements_torchtune.txt /app/requirements.txt
+    containers/requirements_torchtune.txt /app/requirements.txt
 
 %post
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-12.9/compat

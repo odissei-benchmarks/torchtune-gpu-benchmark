@@ -2,9 +2,11 @@
 #
 #SBATCH --job-name=a100_4device_con
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=4
-#SBATCH --cpus-per-task=1
+#SBATCH --ntasks=1
+## #SBATCH --ntasks-per-node=4
+## #SBATCH --cpus-per-task=1
 #SBATCH --time=20:00
+#SBATCH --cpus-per-task=8
 #SBATCH --mem=80G
 #SBATCH -p gpu_a100
 #SBATCH --gpus-per-node=4

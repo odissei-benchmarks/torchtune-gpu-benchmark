@@ -43,5 +43,5 @@ srun apptainer exec \
   --env WORLD_SIZE=$WORLD_SIZE \
   --env GPUS_PER_NODE=$GPUS_PER_NODE \
   --nv \
-  $PROJECT_DIR/torchtune/containers/megatron-torch.sif \
+  $PROJECT_DIR/torchtune/containers/megatron-torch-25.06.sif \h
   ./snellius-scripts/launch-tune.sh

@@ -2,7 +2,7 @@
 #
 #SBATCH --job-name=h100_8device_con
 #SBATCH --nodes=2
-#SBATCH --ntasks-per-node=1
+#SBATCH --ntasks=2
 #SBATCH --cpus-per-task=8
 #SBATCH --time=20:00
 #SBATCH --mem=80G
@@ -24,20 +24,18 @@ head_node_ip=$(srun --nodes=1 --ntasks=1 -w "$head_node" hostname --ip-address)
 echo Node IP: $head_node_ip
 
 # eth1 for OSSC
-export NCCL_SOCKET_IFNAME="eno"
+#export NCCL_SOCKET_IFNAME="eno"
 export NCCL_DEBUG=INFO
-2
+
 # Set distributed training env variables
 export MASTER_ADDR=$head_node_ip
 export MASTER_PORT=12345
 export WORLD_SIZE=$((SLURM_JOB_NUM_NODES * SLURM_GPUS_PER_NODE))
 
-
-
-
 srun apptainer exec \
   --bind $PROJECT_DIR:/prjs1589 \
   --bind /tmp:$HOME/repositories/torchtune-gpu-benchmark/snellius-scripts/tmp_exec \
+  --env NCCL_SOCKET_IFNAME=eno \
   --env MASTER_PORT=$MASTER_PORT \
   --env MASTER_ADDR=$MASTER_ADDR \
   --env WORLD_SIZE=$WORLD_SIZE \

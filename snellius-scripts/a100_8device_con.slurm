@@ -1,13 +1,13 @@
 #!/bin/bash
 #
-#SBATCH --job-name=a100_1device_con
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=8
-#SBATCH --time=15:00
+#SBATCH --job-name=a100_8device_con
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=4
+#SBATCH --cpus-per-task=1
+#SBATCH --time=20:00
 #SBATCH --mem=80G
 #SBATCH -p gpu_a100
-#SBATCH --gpus-per-node=1
+#SBATCH --gpus-per-node=4
 #SBATCH -e logs/%x-%j.err
 #SBATCH -o logs/%x-%j.out
 
@@ -38,6 +38,9 @@ export WORLD_SIZE=$((SLURM_JOB_NUM_NODES * SLURM_GPUS_PER_NODE))
 srun apptainer exec \
   --bind $PROJECT_DIR:/prjs1589 \
   --bind /tmp:$HOME/repositories/torchtune-gpu-benchmark/snellius-scripts/tmp_exec \
+  --env NCCL_SOCKET_IFNAME=eno \
+  --env NCCL_IB_HCA=mlx5_2,mlx5_3,mlx5_4,mlx5_5 \
+  --env CUDA_DEVICE_MAX_CONNECTIONS=1 \
   --env MASTER_PORT=$MASTER_PORT \
   --env MASTER_ADDR=$MASTER_ADDR \
   --env WORLD_SIZE=$WORLD_SIZE \

@@ -4,7 +4,7 @@
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=8
-#SBATCH --time=15:00
+#SBATCH --time=20:00
 #SBATCH --mem=80G
 #SBATCH -p gpu_h100
 #SBATCH --gpus-per-node=4
@@ -14,6 +14,8 @@
 export MASTER_ADDR=$(scontrol show hostnames "$SLURM_STEP_NODELIST" | head -n 1)
 echo "MASTER_ADDR: $MASTER_ADDR"
 
+PROJECT_DIR=/projects/0/prjs1589/
+
 # Grab the IP for head node
 nodes=( $( scontrol show hostnames $SLURM_JOB_NODELIST ) )
 nodes_array=($nodes)
@@ -22,21 +24,25 @@ head_node_ip=$(srun --nodes=1 --ntasks=1 -w "$head_node" hostname --ip-address)
 echo Node IP: $head_node_ip
 
 # eth1 for OSSC
-export NCCL_SOCKET_IFNAME="eno2np0"
+export NCCL_SOCKET_IFNAME="eno"
 export NCCL_DEBUG=INFO
-
+2
 # Set distributed training env variables
 export MASTER_ADDR=$head_node_ip
 export MASTER_PORT=12345
 export WORLD_SIZE=$((SLURM_JOB_NUM_NODES * SLURM_GPUS_PER_NODE))
 
+
+
+
 srun apptainer exec \
-  --bind /projects/0/prjs1019:/prjs1019 \
-  --bind /tmp:/home/mniznik/GitHub/torchtune-gpu-benchmark/snellius-scripts/tmp_exec \
+  --bind $PROJECT_DIR:/prjs1589 \
+  --bind /tmp:$HOME/repositories/torchtune-gpu-benchmark/snellius-scripts/tmp_exec \
   --env MASTER_PORT=$MASTER_PORT \
   --env MASTER_ADDR=$MASTER_ADDR \
   --env WORLD_SIZE=$WORLD_SIZE \
   --env GPUS_PER_NODE=$GPUS_PER_NODE \
+  --env TRITON_LIBCUDA_PATH=/usr/local/cuda-12.9/compat/lib.real/lib/libcuda.so.1 \
   --nv \
-  /projects/0/prjs1019/torchtune/containers/megatron-torch-2.7-nvcr.25-06.sif \
-  ./launch-tune.sh
+  $PROJECT_DIR/torchtune/containers/megatron-torch-25.06-v2.sif \
+  ./snellius-scripts/launch-tune.sh

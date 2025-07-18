@@ -1,0 +1,20 @@
+Bootstrap: docker
+From: nvcr.io/nvidia/pytorch:25.06-py3
+
+%files
+    requirements_torchtune.txt /app/requirements.txt
+
+%post
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-12.9/compat
+    export PIP_NO_CACHE_DIR=1
+
+    export DEBIAN_FRONTEND=noninteractive
+
+    pip install -r /app/requirements.txt
+
+    rm /app/requirements.txt
+
+%environment
+    export LD_PRELOAD=
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-12.9/compat
+

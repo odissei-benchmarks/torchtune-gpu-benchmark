@@ -23,7 +23,8 @@ From: nvcr.io/nvidia/pytorch:25.06-py3
     cd /tmp/mpich && wget -O mpich-$MPICH_VERSION.tar.gz $MPICH_URL && tar xzf mpich-$MPICH_VERSION.tar.gz
     # Compile and install
     cd /tmp/mpich/mpich-$MPICH_VERSION
-    FFLAGS=-fallow-argument-mismatch FCFLAGS=-fallow-argument-mismatch ./configure --prefix=$MPICH_DIR 
+    FFLAGS=-fallow-argument-mismatch FCFLAGS=-fallow-argument-mismatch \
+        ./configure --prefix=$MPICH_DIR 
     make -j$(nproc) install
 
     # Set env variables so we can compile our application
@@ -49,10 +50,16 @@ From: nvcr.io/nvidia/pytorch:25.06-py3
     # ## Python venv
     pip install -r /app/requirements.txt
 
+    # ## Cleanup
     rm /app/requirements.txt
+    rm -rf $TMPDIR/mpich
+    rm -rf /opt/nccl-tests/.git
+    apt-get clean
+    rm -rf /var/lib/apt/lists/*
+
 
 %environment
     export LD_PRELOAD=
+    export PATH=$PATH:/opt/mpich/bin:/usr/local/bin/nccl-tests
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-12.9/compat
-    export PATH=$PATH:/usr/local/bin/nccl-tests
-
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/mpich/lib

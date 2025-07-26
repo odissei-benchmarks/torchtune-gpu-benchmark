@@ -10,6 +10,43 @@ From: nvcr.io/nvidia/pytorch:25.06-py3
 
     export DEBIAN_FRONTEND=noninteractive
 
+    # ## Install MPI
+    export TMPDIR=/tmp # otherwise `build ./configure` fails
+    export MPICH_VERSION=4.0.2 # From snellius module
+    export MPICH_URL="http://www.mpich.org/static/downloads/$MPICH_VERSION/mpich-$MPICH_VERSION.tar.gz"
+    export MPICH_DIR=/opt/mpich
+
+    echo "Installing MPICH..."
+    mkdir -p /tmp/mpich
+    mkdir -p /opt
+    # Download
+    cd /tmp/mpich && wget -O mpich-$MPICH_VERSION.tar.gz $MPICH_URL && tar xzf mpich-$MPICH_VERSION.tar.gz
+    # Compile and install
+    cd /tmp/mpich/mpich-$MPICH_VERSION
+    FFLAGS=-fallow-argument-mismatch FCFLAGS=-fallow-argument-mismatch ./configure --prefix=$MPICH_DIR 
+    make -j$(nproc) install
+
+    # Set env variables so we can compile our application
+    export PATH=$MPICH_DIR/bin:$PATH
+    export LD_LIBRARY_PATH=$MPICH_DIR/lib:$LD_LIBRARY_PATH
+
+    # ## NCCL tests
+    cd /opt
+    git clone https://github.com/NVIDIA/nccl-tests.git
+    cd nccl-tests
+    make MPI=1 MPI_HOME=$MPICH_DIR CUDA_HOME=/usr/local/cuda \
+        NVCC_GENCODE="-gencode=arch=compute_80,code=sm_80 -gencode=arch=compute_90,code=sm_90" \
+        -j$(nproc)
+
+    mkdir -p /usr/local/bin/nccl-tests
+    cp /opt/nccl-tests/build/all_reduce_perf /usr/local/bin/nccl-tests/
+    cp /opt/nccl-tests/build/all_gather_perf /usr/local/bin/nccl-tests/
+    cp /opt/nccl-tests/build/broadcast_perf /usr/local/bin/nccl-tests/
+    cp /opt/nccl-tests/build/reduce_perf /usr/local/bin/nccl-tests/
+    cp /opt/nccl-tests/build/reduce_scatter_perf /usr/local/bin/nccl-tests/
+    cp /opt/nccl-tests/build/alltoall_perf /usr/local/bin/nccl-tests/
+
+    # ## Python venv
     pip install -r /app/requirements.txt
 
     rm /app/requirements.txt
@@ -17,4 +54,5 @@ From: nvcr.io/nvidia/pytorch:25.06-py3
 %environment
     export LD_PRELOAD=
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-12.9/compat
+    export PATH=$PATH:/usr/local/bin/nccl-tests
 

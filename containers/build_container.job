@@ -10,7 +10,7 @@
 
 PROJECT_SPACE=/projects/0/prjs1589/torchtune/
 CONTAINER_DEF_FILE=containers/megatron-torch.def
-CONTAINER_NAME=megatron-torch-25.06-v3.sif
+CONTAINER_NAME=megatron-torch-25.06-v3-nccl-mpi.sif
 
 # these two did not work when running on rome
 export APPTAINER_TMPDIR=/scratch-shared/$USER/apptainer

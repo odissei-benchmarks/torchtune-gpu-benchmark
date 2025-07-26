@@ -12,7 +12,7 @@ From: nvcr.io/nvidia/pytorch:25.06-py3
 
     # ## Install MPI
     export TMPDIR=/tmp # otherwise `build ./configure` fails
-    export MPICH_VERSION=4.0.2 # From snellius module
+    export MPICH_VERSION=4.2.2 # From snellius module
     export MPICH_URL="http://www.mpich.org/static/downloads/$MPICH_VERSION/mpich-$MPICH_VERSION.tar.gz"
     export MPICH_DIR=/opt/mpich
 

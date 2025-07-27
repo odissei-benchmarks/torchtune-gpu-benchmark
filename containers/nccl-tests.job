@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=nccl-tests
-#SBATCH --nodes=1
+#SBATCH --nodes=2
 #SBATCH --ntasks-per-node=4
 #SBATCH --gpus-per-node=4
 #SBATCH --partition=gpu_a100
@@ -10,6 +10,7 @@
 
 source containers/setup_nccl_tests.sh
 
+let WORLD_SIZE="$SLURM_GPUS_PER_NODE*$SLURM_JOB_NUM_NODES"
 
 LOW=64M
 HIGH=512M
@@ -18,15 +19,15 @@ STEP=2
 
 # Run multiple tests to cover FSDP's communication patterns
 echo "Testing All-Reduce"
-mpirun -N 4 \
+mpirun -N $SLURM_GPUS_PER_NODE \
     apptainer exec \
     --env NCCL_SOCKET_IFNAME="eno" \
     --env NCCL_DEBUG="VERSION" \
-    --env GPUS_PER_NODE=4 \
-    --env WORLD_SIZE=4 \
+    --env GPUS_PER_NODE=$SLURM_GPUS_PER_NODE \
+    --env WORLD_SIZE=$WORLD_SIZE \
     --env OPAL_PREFIX=/opt/ompi \
     --nv $IMAGE \
-    all_reduce_perf -b $LOW -e $HIGH -f $STEP -g 4
+    all_reduce_perf -b $LOW -e $HIGH -f $STEP -g $SLURM_GPUS_PER_NODE
 
 #echo "Testing All-Gather (for weight consolidation)"
 #srun apptainer exec --nv $IMAGE \

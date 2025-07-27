@@ -8,39 +8,73 @@
 #SBATCH -e logs/%x.%j.err
 #SBATCH -o logs/%x.%j.out
 
+# Check with cat logs/nccl-tests.jobid.out | grep -e  "bandwidth" -e "Testing"
+
 source containers/setup_nccl_tests.sh
 
-let WORLD_SIZE="$SLURM_GPUS_PER_NODE*$SLURM_JOB_NUM_NODES"
+#let WORLD_SIZE="$SLURM_GPUS_PER_NODE*$SLURM_JOB_NUM_NODES"
+NCCL_DEBUG="INFO"
+NCCL_SOCKET="eno"
 
 LOW=64M
 HIGH=512M
 STEP=2
 
+echo "Infiniband speed:"
+ibstat | grep -A 3 -B 3 "Rate"
+
+echo "GPUS per node: $SLURM_GPUS_PER_NODE"
+
+MLX_LIBS=find /usr/lib64 -name "libmlx*.so" -o -name "libibverbs.so*" | xargs -I{} dirname {} | sort | uniq | paste -sd "," -
+IB_LIBS=find /usr/lib64 -path "*/libibverbs/*" | xargs -I{} dirname {} | sort | uniq | paste -sd "," -
+
 
 # Run multiple tests to cover FSDP's communication patterns
 echo "Testing All-Reduce"
-mpirun -N $SLURM_GPUS_PER_NODE \
+mpirun -N 4 \
     apptainer exec \
-    --env NCCL_SOCKET_IFNAME="eno" \
-    --env NCCL_DEBUG="VERSION" \
-    --env GPUS_PER_NODE=$SLURM_GPUS_PER_NODE \
-    --env WORLD_SIZE=$WORLD_SIZE \
+    --bind $MLX_LIBS,$IB_LIBS \
+    --env NCCL_SOCKET_IFNAME=$NCCL_SOCKET \
+    --env NCCL_DEBUG=$NCCL_DEBUG \
     --env OPAL_PREFIX=/opt/ompi \
+    --env TRITON_LIBCUDA_PATH=/usr/local/cuda-12.9/compat/lib.real/lib/libcuda.so.1 \
     --nv $IMAGE \
-    all_reduce_perf -b $LOW -e $HIGH -f $STEP -g $SLURM_GPUS_PER_NODE
+    all_reduce_perf -b $LOW -e $HIGH -f $STEP -g 1
 
-#echo "Testing All-Gather (for weight consolidation)"
-#srun apptainer exec --nv $IMAGE \
-#    all_gather_perf -b $LOW -e $HIGH -f $STEP -g $N_GPUS
+
+#echo "Testing All-Gather"
+#mpirun -N $SLURM_GPUS_PER_NODE \
+#    apptainer exec \
+#    --env NCCL_SOCKET_IFNAME=$NCCL_SOCKET \
+#    --env NCCL_DEBUG=$NCCL_DEBUG \
+#    --env GPUS_PER_NODE=$SLURM_GPUS_PER_NODE \
+#    --env WORLD_SIZE=$WORLD_SIZE \
+#    --env OPAL_PREFIX=/opt/ompi \
+#    --nv $IMAGE \
+#    all_gather_perf -b $LOW -e $HIGH -f $STEP -g $SLURM_GPUS_PER_NODE
 #
-#echo "Testing Reduce-Scatter (for gradient partitioning)"
-#srun apptainer exec --nv $IMAGE \
-#    reduce_scatter_perf -b $LOW -e $HIGH -f $STEP -g $N_GPUS
-
-#echo "Stress-testing with many iterations" 
-#srun apptainer exec --nv $IMAGE \
-#    all_reduce_perf -b $LOW -e 256M -f $STEP -g $N_GPUS -n 100 -i 5
-
+#echo "Testing Reduce-Scatter"
+#mpirun -N $SLURM_GPUS_PER_NODE \
+#    apptainer exec \
+#    --env NCCL_SOCKET_IFNAME=$NCCL_SOCKET \
+#    --env NCCL_DEBUG=$NCCL_DEBUG \
+#    --env GPUS_PER_NODE=$SLURM_GPUS_PER_NODE \
+#    --env WORLD_SIZE=$WORLD_SIZE \
+#    --env OPAL_PREFIX=/opt/ompi \
+#    --nv $IMAGE \
+#    reduce_scatter_perf -b $LOW -e $HIGH -f $STEP -g $SLURM_GPUS_PER_NODE
+#
+#
+#echo "Stress-Testing with many iterations" 
+#mpirun -N $SLURM_GPUS_PER_NODE \
+#    apptainer exec \
+#    --env NCCL_SOCKET_IFNAME=$NCCL_SOCKET \
+#    --env NCCL_DEBUG=$NCCL_DEBUG \
+#    --env GPUS_PER_NODE=$SLURM_GPUS_PER_NODE \
+#    --env WORLD_SIZE=$WORLD_SIZE \
+#    --env OPAL_PREFIX=/opt/ompi \
+#    --nv $IMAGE \
+#    all_reduce_perf -b $LOW -e 256M -f $STEP -g $SLURM_GPUS_PER_NODE -n 100 -i 5
 
 
 

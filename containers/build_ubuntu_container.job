@@ -8,8 +8,8 @@
 #SBATCH -e logs/%x.%j.err
 #SBATCH -o logs/%x.%j.out
 
-PROJECT_SPACE=/projects/0/prjs1589/torchtune/
-CONTAINER_DEF_FILE=ubuntu-mpi.def
+PROJECT_SPACE=$HOME/data/torchtune/ #/projects/0/prjs1589/torchtune/
+CONTAINER_DEF_FILE=containers/ubuntu-mpi.def
 CONTAINER_NAME=ubuntu-mpi.sif
 
 # these two did not work when running on rome
@@ -32,5 +32,6 @@ apptainer build --force --fakeroot \
 
 
 echo "Done building."
+
 
 

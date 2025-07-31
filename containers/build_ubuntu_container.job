@@ -1,0 +1,36 @@
+#!/bin/bash
+#SBATCH --job-name=container
+#SBATCH --nodes=1
+#SBATCH --partition=cbuild
+#SBATCH --ntasks-per-node=1
+#SBATCH --time=10:00:00
+#SBATCH --exclusive
+#SBATCH -e logs/%x.%j.err
+#SBATCH -o logs/%x.%j.out
+
+PROJECT_SPACE=/projects/0/prjs1589/torchtune/
+CONTAINER_DEF_FILE=ubuntu-mpi.def
+CONTAINER_NAME=ubuntu-mpi.sif
+
+# these two did not work when running on rome
+export APPTAINER_TMPDIR=/scratch-shared/$USER/apptainer
+export APPTAINER_CACHEDIR=$PROJECT_SPACE/$USER/apptainer
+
+if [ -z "$PROJECT_SPACE" ]; then
+  echo "Error: PROJECT_SPACE is not set. Please set the project space path in this script. Example: export PROJECT_SPACE=/projects/0/prjsXXXX"
+  exit 1
+fi
+
+CONTAINER_OUTPUT_PATH=$PROJECT_SPACE/containers/$CONTAINER_NAME
+
+mkdir -p $CONTAINER_OUTPUT_PATH $APPTAINER_TMPDIR $APPTAINER_CACHEDIR
+
+apptainer build --force --fakeroot \
+    -B/dev/shm:/tmp \
+    $CONTAINER_OUTPUT_PATH \
+    $CONTAINER_DEF_FILE
+
+
+echo "Done building."
+
+

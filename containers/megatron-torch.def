@@ -12,34 +12,16 @@ From: nvcr.io/nvidia/pytorch:25.06-py3
 
     export DEBIAN_FRONTEND=noninteractive
 
-    # ## Install MPI
-    # see https://apptainer.org/docs/user/main/mpi.html#open-mpi-hybrid-container
-    echo "Installing Open MPI..."
-    export TMPDIR=/tmp # otherwise `build ./configure` fails (at least for MPICH)
-    export OMPI_DIR=/opt/ompi
-    export OMPI_VERSION=5.0.3
-    export OMPI_URL="https://download.open-mpi.org/release/open-mpi/v5.0/openmpi-$OMPI_VERSION.tar.bz2"
-
-    mkdir -p /tmp/ompi
-    mkdir -p /opt
-    # Download
-    cd /tmp/ompi && wget -O openmpi-$OMPI_VERSION.tar.bz2 $OMPI_URL && tar -xjf openmpi-$OMPI_VERSION.tar.bz2
-    # Compile and install
-    cd /tmp/ompi/openmpi-$OMPI_VERSION 
-    FFLAGS=-fallow-argument-mismatch FCFLAGS=-fallow-argument-mismatch \
-        ./configure --prefix=$OMPI_DIR 
-    make -j$(nproc) install
-
     # Set env variables so we can compile our application
-    export PATH=$OMPI_DIR/bin:$PATH
-    export LD_LIBRARY_PATH=$OMPI_DIR/lib:$LD_LIBRARY_PATH
+    export PATH={{ ompi_dir }}/bin:$PATH
+    export LD_LIBRARY_PATH={{ ompi_dir }}/lib:$LD_LIBRARY_PATH
 
     # ## NCCL tests
     echo "Installing NCCL tests"
     cd /tmp
     git clone https://github.com/NVIDIA/nccl-tests.git
     cd nccl-tests
-    make MPI=1 MPI_HOME=$OMPI_DIR CUDA_HOME=/usr/local/cuda \
+    make MPI=1 MPI_HOME={{ ompi_dir }} CUDA_HOME=/usr/local/cuda \
         NVCC_GENCODE="-gencode=arch=compute_80,code=sm_80 -gencode=arch=compute_90,code=sm_90" \
         -j$(nproc)
 
@@ -59,23 +41,13 @@ From: nvcr.io/nvidia/pytorch:25.06-py3
 
     # ## Cleanup
     rm /app/requirements.txt
-    rm -rf /tmp/ompi 
     rm -rf /tmp/nccl-tests
-
-    # Add verification steps
-    echo "Verifying OpenMPI installation..."
-    ls -la $OMPI_DIR || echo "OMPI_DIR not found!"
-    $OMPI_DIR/bin/mpirun --version || echo "mpirun not working!"
 
 
 %environment
-    export OMPI_DIR=/opt/ompi
     export NCCL_TEST_DIR=/opt/nccl-tests/bin
  
     export LD_PRELOAD=
     export PATH="$PATH:$NCCL_TEST_DIR"
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-12.9/compat
 
-    export PATH="$OMPI_DIR/bin:$PATH"
-    export LD_LIBRARY_PATH="$OMPI_DIR/lib:$LD_LIBRARY_PATH"
-    export MANPATH="$OMPI_DIR/share/man:$MANPATH"

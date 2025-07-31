@@ -8,13 +8,14 @@
 #SBATCH -e logs/%x.%j.err
 #SBATCH -o logs/%x.%j.out
 
-PROJECT_SPACE=/projects/0/prjs1589/torchtune/
+PROJECT_SPACE=$HOME/data/torchtune/ #/projects/0/prjs1589/torchtune/
 CONTAINER_DEF_FILE=containers/megatron-torch.def
 CONTAINER_NAME=megatron-torch-25.06-v3-nccl-mpi.sif
 
 # these two did not work when running on rome
 export APPTAINER_TMPDIR=/scratch-shared/$USER/apptainer
 export APPTAINER_CACHEDIR=$PROJECT_SPACE/$USER/apptainer
+export OMPI_DIR="/sw/arch/RHEL9/EB_production/2024/modulefiles/mpi/OpenMPI/5.0.3-GCC-13.3.0.lua"
 
 if [ -z "$PROJECT_SPACE" ]; then
   echo "Error: PROJECT_SPACE is not set. Please set the project space path in this script. Example: export PROJECT_SPACE=/projects/0/prjsXXXX"
@@ -26,7 +27,9 @@ CONTAINER_OUTPUT_PATH=$PROJECT_SPACE/containers/$CONTAINER_NAME
 mkdir -p $CONTAINER_OUTPUT_PATH $APPTAINER_TMPDIR $APPTAINER_CACHEDIR
 
 apptainer build --force --fakeroot \
-    -B/dev/shm:/tmp \
+    --bind /dev/shm:/tmp \
+    --bind "$OMPI_DIR" \
+    --build-arg ompi_dir="$OMPI_DIR" \
     $CONTAINER_OUTPUT_PATH \
     $CONTAINER_DEF_FILE
 

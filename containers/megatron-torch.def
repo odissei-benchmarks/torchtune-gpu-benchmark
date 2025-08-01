@@ -13,7 +13,7 @@ From: nvcr.io/nvidia/pytorch:25.06-py3
     export DEBIAN_FRONTEND=noninteractive
 
     # Set env variables so we can compile our application
-    export PATH={{ ompi_dir }}/bin:$PATH
+    #export PATH={{ ompi_dir }}/bin:$PATH
     export LD_LIBRARY_PATH={{ ompi_dir }}/lib:$LD_LIBRARY_PATH
 
     # ## NCCL tests

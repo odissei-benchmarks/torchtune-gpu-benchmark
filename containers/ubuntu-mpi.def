@@ -5,7 +5,7 @@ From: ubuntu:22.04
     containers/mpitest.c /opt/mpitest.c
 
 %post
-    chomd +x /opt/mpitest.c
+    chmod +x /opt/mpitest.c
 
 %environment
     export PATH="$MPI_DIR/bin:$PATH"

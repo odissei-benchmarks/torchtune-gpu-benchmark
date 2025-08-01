@@ -18,5 +18,5 @@ export MPI_DIR="/sw/arch/RHEL9/EB_production/2024/modulefiles/mpi/OpenMPI/5.0.3-
 srun -N 2 -n 8 apptainer exec \
        	--bind "$MPI_DIR" \
 	$HOME/data/torchtune/containers/ubuntu-mpi.sif \
-	hostname
+	/opt/mpitest
 

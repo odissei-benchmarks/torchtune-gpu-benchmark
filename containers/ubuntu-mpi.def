@@ -2,10 +2,10 @@ Bootstrap: docker
 From: ubuntu:22.04
 
 %files
-    containers/mpitest.c /opt/mpitest.c
+    containers/mpitest /opt/mpitest
 
 %post
-    chmod +x /opt/mpitest.c
+    chmod +x /opt/mpitest
 
 %environment
     export PATH="$MPI_DIR/bin:$PATH"

@@ -35,3 +35,14 @@ The difference between Snellius and Della is down to memory clock speeds:
 |------|----------|----------|
 | A100 | 1600 MHz | 1215 MHz |
 | H100 | 2600 MHz | 1590 MHz |
+
+### Running on your system
+
+1. Create an account on [Weights & Biases](https://wandb.ai/).
+1. Download the foundation model and place it in the `models` directory.
+This project uses the [Llama-3.2-1B-Instruct](https://huggingface.co/meta-llama/Llama-3.2-1B-Instruct/tree/main) model.
+1. Install the required Python dependencies listed in `requirements/baseline.txt`.
+1. Adapt the SLURM job scripts to match your system configuration.
+
+1. First run the models in an interactive mode so that it prompts for Weights & Biases login details.
+1. Run SLURM jobs.
